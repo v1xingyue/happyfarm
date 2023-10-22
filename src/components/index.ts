@@ -1,3 +1,4 @@
 import Header from './header';
+import GameHeader from './gameheader';
 
-export { Header };
+export { Header, GameHeader };

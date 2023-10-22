@@ -3,9 +3,8 @@ module happyfarm::init {
     use sui::transfer;
     use sui::tx_context::TxContext;
     use happyfarm::world;
-	use happyfarm::counter_schema;
+	use happyfarm::global_schema;
 	use happyfarm::player_info_schema;
-	use happyfarm::room_info_schema;
 	use happyfarm::plant_schema;
 	use happyfarm::plant_attrs_schema;
 
@@ -13,9 +12,8 @@ module happyfarm::init {
         let _obelisk_world = world::create(string(b"Happyfarm"), string(b"Happyfarm"),ctx);
 
         // Add Schema
-		counter_schema::register(&mut _obelisk_world, ctx);
+		global_schema::register(&mut _obelisk_world, ctx);
 		player_info_schema::register(&mut _obelisk_world, ctx);
-		room_info_schema::register(&mut _obelisk_world, ctx);
 		plant_schema::register(&mut _obelisk_world, ctx);
 		plant_attrs_schema::register(&mut _obelisk_world, ctx);
 

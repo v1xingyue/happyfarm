@@ -3,32 +3,31 @@ import { ObeliskConfig } from '@0xobelisk/common';
 export const obeliskConfig = {
   name: 'happyfarm',
   description: 'happyfarm',
-  systems: ['counter_system', 'player_system'],
+  systems: ['counter_system', 'player_system', 'field_system'],
   schemas: {
-    counter: {
+    global: {
       singleton: true,
       valueType: {
         counter: 'u64',
         admin: 'address',
+        field_price: 'u64',
+        last_field_no: 'u64',
+        init_user_socre: 'u64',
       },
       defaultValue: {
         counter: 0,
         admin: '@0x0000000',
+        field_price: 10,
+        last_field_no: 1000,
+        init_user_socre: 200,
       },
     },
     player_info: {
       singleton: false,
       valueType: {
         score: 'u64',
-        room: 'address',
+        field: 'u64',
         register: 'bool',
-      },
-    },
-    room_info: {
-      singleton: false,
-      valueType: {
-        pos: 'vector<u64>',
-        size: 'u8',
       },
     },
     plant: {

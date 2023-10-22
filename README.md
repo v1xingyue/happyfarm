@@ -1,14 +1,7 @@
-## How to use
-```bash
+# 开心农场
 
-1 install sui <https://docs.sui.io/build/install>
-2 cd quick_start folder 
-3 pnpm install
-4 open new window && pnpm run localnode
-5 open new window && pnpm run start-template
+一个种菜的游戏，在sui 链上 还原一个web2.0 里开心农场的游戏。
 
-environment : node v18.16.0 best
-please use node -v check your node version 
-```
+1. 注册游戏，获得积分，购买房间，种菜，收获
+2. 用户释放技能，影响其他用户的菜。
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).

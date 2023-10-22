@@ -8,6 +8,7 @@ module happyfarm::player_info_schema {
     // Systems
 	friend happyfarm::counter_system;
 	friend happyfarm::player_system;
+	friend happyfarm::field_system;
 
 	/// Entity does not exist
 	const EEntityDoesNotExist: u64 = 0;
@@ -15,18 +16,18 @@ module happyfarm::player_info_schema {
 	const SCHEMA_ID: vector<u8> = b"player_info";
 
 	// score
-	// room
+	// field
 	// register
 	struct PlayerInfoData has copy, drop , store {
 		score: u64,
-		room: address,
+		field: u64,
 		register: bool
 	}
 
-	public fun new(score: u64, room: address, register: bool): PlayerInfoData {
+	public fun new(score: u64, field: u64, register: bool): PlayerInfoData {
 		PlayerInfoData {
 			score, 
-			room, 
+			field, 
 			register
 		}
 	}
@@ -35,9 +36,9 @@ module happyfarm::player_info_schema {
 		world::add_schema<Table<address,PlayerInfoData>>(_obelisk_world, SCHEMA_ID, table::new<address, PlayerInfoData>(ctx));
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  score: u64, room: address, register: bool) {
+	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  score: u64, field: u64, register: bool) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlayerInfoData>>(_obelisk_world, SCHEMA_ID);
-		let _obelisk_data = new( score, room, register);
+		let _obelisk_data = new( score, field, register);
 		if(table::contains<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key)) {
 			*table::borrow_mut<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key) = _obelisk_data;
 		} else {
@@ -54,11 +55,11 @@ module happyfarm::player_info_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public(friend) fun set_room(_obelisk_world: &mut World, _obelisk_entity_key: address, room: address) {
+	public(friend) fun set_field(_obelisk_world: &mut World, _obelisk_entity_key: address, field: u64) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlayerInfoData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow_mut<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key);
-		_obelisk_data.room = room;
+		_obelisk_data.field = field;
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
@@ -70,13 +71,13 @@ module happyfarm::player_info_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,address,bool) {
+	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,u64,bool) {
 		let _obelisk_schema = world::get_schema<Table<address,PlayerInfoData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key);
 		(
 			_obelisk_data.score,
-			_obelisk_data.room,
+			_obelisk_data.field,
 			_obelisk_data.register
 		)
 	}
@@ -88,11 +89,11 @@ module happyfarm::player_info_schema {
 		_obelisk_data.score
 	}
 
-	public fun get_room(_obelisk_world: &World, _obelisk_entity_key: address): address {
+	public fun get_field(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
 		let _obelisk_schema = world::get_schema<Table<address,PlayerInfoData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlayerInfoData>(_obelisk_schema, _obelisk_entity_key);
-		_obelisk_data.room
+		_obelisk_data.field
 	}
 
 	public fun get_register(_obelisk_world: &World, _obelisk_entity_key: address): bool {

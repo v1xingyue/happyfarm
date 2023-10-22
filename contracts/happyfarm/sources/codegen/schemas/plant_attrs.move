@@ -8,6 +8,7 @@ module happyfarm::plant_attrs_schema {
     // Systems
 	friend happyfarm::counter_system;
 	friend happyfarm::player_system;
+	friend happyfarm::field_system;
 
 	/// Entity does not exist
 	const EEntityDoesNotExist: u64 = 0;

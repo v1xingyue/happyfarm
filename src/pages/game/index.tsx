@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { useSetAtom } from 'jotai';
-import { PlayerInfo, UserAddress, UserBalance } from '../../jotai';
-import { Header } from '../../components';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { BalanceVersion, UserAddress, UserBalance } from '../../jotai';
+import { Header, GameHeader } from '../../components';
 import { LoadObelisk } from '../../tool';
 
 const Game = () => {
+  const blanceVersion = useAtomValue(BalanceVersion);
   const setAddress = useSetAtom(UserAddress);
   const setBlance = useSetAtom(UserBalance);
 
@@ -19,11 +20,12 @@ const Game = () => {
       console.log(obelisk);
     };
     asyncHandler();
-  }, [setAddress, setBlance]);
+  }, [setAddress, setBlance, blanceVersion]);
 
   return (
     <>
       <Header />
+      <GameHeader />
     </>
   );
 };
