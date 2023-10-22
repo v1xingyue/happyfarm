@@ -6,7 +6,6 @@ export const obeliskConfig = {
   systems: ['counter_system', 'player_system', 'field_system'],
   schemas: {
     global: {
-      singleton: true,
       valueType: {
         counter: 'u64',
         admin: 'address',
@@ -16,14 +15,13 @@ export const obeliskConfig = {
       },
       defaultValue: {
         counter: 0,
-        admin: '@0x0000000',
+        admin: '0x0000000',
         field_price: 10,
         last_field_no: 1000,
         init_user_socre: 200,
       },
     },
     player_info: {
-      singleton: false,
       valueType: {
         score: 'u64',
         field: 'u64',
@@ -31,7 +29,6 @@ export const obeliskConfig = {
       },
     },
     plant: {
-      singleton: false,
       valueType: {
         pos: 'vector<u8>',
         score: 'u64',
@@ -40,7 +37,6 @@ export const obeliskConfig = {
       },
     },
     plant_attrs: {
-      singleton: false,
       valueType: {
         init_score: 'u64',
         sun_effect: 'u64',
