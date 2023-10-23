@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { BalanceVersion, UserAddress, UserBalance } from '../jotai';
-import { LoadObelisk } from '../tool';
+import { LoadObelisk, addressLink } from '../tool';
 import { NETWORK } from '../chain/config';
 import { FaucetNetworkType } from '@0xobelisk/client';
 
@@ -19,7 +19,12 @@ const Header = () => {
 
   return (
     <div>
-      <span>Address : {address}</span>
+      <span>
+        Address :{' '}
+        <a className="link link-hover link-primary" href={addressLink(address)} target="_blank">
+          {address}
+        </a>
+      </span>
       <span className="ml-3">Balance: {blance}</span>
       {blance == '0' ? (
         <button onClick={doAirDrop} className="btn btn-info ml-2">

@@ -22,4 +22,9 @@ const LoadObelisk = async () => {
   }
 };
 
-export { LoadObelisk };
+const addressLink = (addr: string) => {
+  const linkName = NETWORK.substring(0, NETWORK.length - 3);
+  return `https://suiexplorer.com/address/${addr}?network=${linkName}`;
+};
+
+export { LoadObelisk, addressLink };

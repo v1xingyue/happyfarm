@@ -31,7 +31,7 @@ const World = () => {
   return (
     <div className="mt-3">
       {fieldAddrs.map((fieldAddr: string, index) => {
-        return <Field key={fieldAddr} msg={fieldAddr} />;
+        return <Field key={fieldAddr} entity={fieldAddr} />;
       })}
     </div>
   );
