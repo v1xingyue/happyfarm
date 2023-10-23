@@ -14,4 +14,6 @@ const PlayerInfoVersion = atom(0);
 const BalanceVersion = atom(0);
 const SecretKey = atom('');
 
-export { Value, UserAddress, UserBalance, PlayerInfo, PlayerInfoVersion, SecretKey, BalanceVersion };
+const FieldAddrs = atom([]);
+
+export { Value, UserAddress, UserBalance, PlayerInfo, PlayerInfoVersion, SecretKey, BalanceVersion, FieldAddrs };

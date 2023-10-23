@@ -5,6 +5,7 @@ module happyfarm::init {
     use happyfarm::world;
 	use happyfarm::global_schema;
 	use happyfarm::player_info_schema;
+	use happyfarm::field_info_schema;
 	use happyfarm::plant_schema;
 	use happyfarm::plant_attrs_schema;
 
@@ -14,6 +15,7 @@ module happyfarm::init {
         // Add Schema
 		global_schema::register(&mut _obelisk_world, ctx);
 		player_info_schema::register(&mut _obelisk_world, ctx);
+		field_info_schema::register(&mut _obelisk_world, ctx);
 		plant_schema::register(&mut _obelisk_world, ctx);
 		plant_attrs_schema::register(&mut _obelisk_world, ctx);
 

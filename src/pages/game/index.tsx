@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { BalanceVersion, UserAddress, UserBalance } from '../../jotai';
-import { Header, GameHeader } from '../../components';
+import { Header, GameHeader, World } from '../../components';
 import { LoadObelisk } from '../../tool';
 
 const Game = () => {
@@ -26,6 +26,7 @@ const Game = () => {
     <>
       <Header />
       <GameHeader />
+      <World />
     </>
   );
 };

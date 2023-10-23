@@ -28,6 +28,12 @@ export const obeliskConfig = {
         register: 'bool',
       },
     },
+    field_info: {
+      valueType: {
+        owner: 'address',
+        filed_no: 'u64',
+      },
+    },
     plant: {
       valueType: {
         pos: 'vector<u8>',
