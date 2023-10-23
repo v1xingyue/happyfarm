@@ -17,15 +17,18 @@ module happyfarm::field_info_schema {
 
 	// owner
 	// filed_no
+	// last_plant_no
 	struct FieldInfoData has copy, drop , store {
 		owner: address,
-		filed_no: u64
+		filed_no: u64,
+		last_plant_no: u64
 	}
 
-	public fun new(owner: address, filed_no: u64): FieldInfoData {
+	public fun new(owner: address, filed_no: u64, last_plant_no: u64): FieldInfoData {
 		FieldInfoData {
 			owner, 
-			filed_no
+			filed_no, 
+			last_plant_no
 		}
 	}
 
@@ -33,9 +36,9 @@ module happyfarm::field_info_schema {
 		world::add_schema<Table<address,FieldInfoData>>(_obelisk_world, SCHEMA_ID, table::new<address, FieldInfoData>(ctx));
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  owner: address, filed_no: u64) {
+	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  owner: address, filed_no: u64, last_plant_no: u64) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,FieldInfoData>>(_obelisk_world, SCHEMA_ID);
-		let _obelisk_data = new( owner, filed_no);
+		let _obelisk_data = new( owner, filed_no, last_plant_no);
 		if(table::contains<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key)) {
 			*table::borrow_mut<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key) = _obelisk_data;
 		} else {
@@ -60,13 +63,22 @@ module happyfarm::field_info_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (address,u64) {
+	public(friend) fun set_last_plant_no(_obelisk_world: &mut World, _obelisk_entity_key: address, last_plant_no: u64) {
+		let _obelisk_schema = world::get_mut_schema<Table<address,FieldInfoData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow_mut<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.last_plant_no = last_plant_no;
+		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
+	}
+
+	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (address,u64,u64) {
 		let _obelisk_schema = world::get_schema<Table<address,FieldInfoData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key);
 		(
 			_obelisk_data.owner,
-			_obelisk_data.filed_no
+			_obelisk_data.filed_no,
+			_obelisk_data.last_plant_no
 		)
 	}
 
@@ -82,6 +94,13 @@ module happyfarm::field_info_schema {
 		assert!(table::contains<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key);
 		_obelisk_data.filed_no
+	}
+
+	public fun get_last_plant_no(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
+		let _obelisk_schema = world::get_schema<Table<address,FieldInfoData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow<address, FieldInfoData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.last_plant_no
 	}
 
 	public(friend) fun remove(_obelisk_world: &mut World, _obelisk_entity_key: address) {

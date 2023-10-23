@@ -1,4 +1,5 @@
 module happyfarm::plant_attrs_schema {
+	use std::ascii::String;
 	use std::option::some;
     use sui::tx_context::TxContext;
     use sui::table::{Self, Table};
@@ -15,22 +16,28 @@ module happyfarm::plant_attrs_schema {
 
 	const SCHEMA_ID: vector<u8> = b"plant_attrs";
 
+	// url
 	// init_score
+	// harvest_socre
 	// sun_effect
 	// wind_effct
 	// rain_effct
 	// snow_effct
 	struct PlantAttrsData has copy, drop , store {
+		url: String,
 		init_score: u64,
+		harvest_socre: u64,
 		sun_effect: u64,
 		wind_effct: u64,
 		rain_effct: u64,
 		snow_effct: u64
 	}
 
-	public fun new(init_score: u64, sun_effect: u64, wind_effct: u64, rain_effct: u64, snow_effct: u64): PlantAttrsData {
+	public fun new(url: String, init_score: u64, harvest_socre: u64, sun_effect: u64, wind_effct: u64, rain_effct: u64, snow_effct: u64): PlantAttrsData {
 		PlantAttrsData {
+			url, 
 			init_score, 
+			harvest_socre, 
 			sun_effect, 
 			wind_effct, 
 			rain_effct, 
@@ -42,9 +49,9 @@ module happyfarm::plant_attrs_schema {
 		world::add_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID, table::new<address, PlantAttrsData>(ctx));
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  init_score: u64, sun_effect: u64, wind_effct: u64, rain_effct: u64, snow_effct: u64) {
+	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  url: String, init_score: u64, harvest_socre: u64, sun_effect: u64, wind_effct: u64, rain_effct: u64, snow_effct: u64) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
-		let _obelisk_data = new( init_score, sun_effect, wind_effct, rain_effct, snow_effct);
+		let _obelisk_data = new( url, init_score, harvest_socre, sun_effect, wind_effct, rain_effct, snow_effct);
 		if(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key)) {
 			*table::borrow_mut<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key) = _obelisk_data;
 		} else {
@@ -53,11 +60,27 @@ module happyfarm::plant_attrs_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), _obelisk_data)
 	}
 
+	public(friend) fun set_url(_obelisk_world: &mut World, _obelisk_entity_key: address, url: String) {
+		let _obelisk_schema = world::get_mut_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow_mut<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.url = url;
+		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
+	}
+
 	public(friend) fun set_init_score(_obelisk_world: &mut World, _obelisk_entity_key: address, init_score: u64) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow_mut<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
 		_obelisk_data.init_score = init_score;
+		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
+	}
+
+	public(friend) fun set_harvest_socre(_obelisk_world: &mut World, _obelisk_entity_key: address, harvest_socre: u64) {
+		let _obelisk_schema = world::get_mut_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow_mut<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.harvest_socre = harvest_socre;
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
@@ -93,12 +116,14 @@ module happyfarm::plant_attrs_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,u64,u64,u64,u64) {
+	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (String,u64,u64,u64,u64,u64,u64) {
 		let _obelisk_schema = world::get_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
 		(
+			_obelisk_data.url,
 			_obelisk_data.init_score,
+			_obelisk_data.harvest_socre,
 			_obelisk_data.sun_effect,
 			_obelisk_data.wind_effct,
 			_obelisk_data.rain_effct,
@@ -106,11 +131,25 @@ module happyfarm::plant_attrs_schema {
 		)
 	}
 
+	public fun get_url(_obelisk_world: &World, _obelisk_entity_key: address): String {
+		let _obelisk_schema = world::get_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.url
+	}
+
 	public fun get_init_score(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
 		let _obelisk_schema = world::get_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
 		_obelisk_data.init_score
+	}
+
+	public fun get_harvest_socre(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
+		let _obelisk_schema = world::get_schema<Table<address,PlantAttrsData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow<address, PlantAttrsData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.harvest_socre
 	}
 
 	public fun get_sun_effect(_obelisk_world: &World, _obelisk_entity_key: address): u64 {

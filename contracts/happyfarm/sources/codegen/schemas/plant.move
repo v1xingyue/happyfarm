@@ -15,20 +15,17 @@ module happyfarm::plant_schema {
 
 	const SCHEMA_ID: vector<u8> = b"plant";
 
-	// pos
 	// score
 	// owner
 	// plant_type
 	struct PlantData has copy, drop , store {
-		pos: vector<u8>,
 		score: u64,
 		owner: address,
-		plant_type: u64
+		plant_type: address
 	}
 
-	public fun new(pos: vector<u8>, score: u64, owner: address, plant_type: u64): PlantData {
+	public fun new(score: u64, owner: address, plant_type: address): PlantData {
 		PlantData {
-			pos, 
 			score, 
 			owner, 
 			plant_type
@@ -39,23 +36,15 @@ module happyfarm::plant_schema {
 		world::add_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID, table::new<address, PlantData>(ctx));
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  pos: vector<u8>, score: u64, owner: address, plant_type: u64) {
+	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  score: u64, owner: address, plant_type: address) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
-		let _obelisk_data = new( pos, score, owner, plant_type);
+		let _obelisk_data = new( score, owner, plant_type);
 		if(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key)) {
 			*table::borrow_mut<address, PlantData>(_obelisk_schema, _obelisk_entity_key) = _obelisk_data;
 		} else {
 			table::add(_obelisk_schema, _obelisk_entity_key, _obelisk_data);
 		};
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), _obelisk_data)
-	}
-
-	public(friend) fun set_pos(_obelisk_world: &mut World, _obelisk_entity_key: address, pos: vector<u8>) {
-		let _obelisk_schema = world::get_mut_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
-		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
-		let _obelisk_data = table::borrow_mut<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
-		_obelisk_data.pos = pos;
-		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
 	public(friend) fun set_score(_obelisk_world: &mut World, _obelisk_entity_key: address, score: u64) {
@@ -74,7 +63,7 @@ module happyfarm::plant_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public(friend) fun set_plant_type(_obelisk_world: &mut World, _obelisk_entity_key: address, plant_type: u64) {
+	public(friend) fun set_plant_type(_obelisk_world: &mut World, _obelisk_entity_key: address, plant_type: address) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow_mut<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
@@ -82,23 +71,15 @@ module happyfarm::plant_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (vector<u8>,u64,address,u64) {
+	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,address,address) {
 		let _obelisk_schema = world::get_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
 		(
-			_obelisk_data.pos,
 			_obelisk_data.score,
 			_obelisk_data.owner,
 			_obelisk_data.plant_type
 		)
-	}
-
-	public fun get_pos(_obelisk_world: &World, _obelisk_entity_key: address): vector<u8> {
-		let _obelisk_schema = world::get_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
-		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
-		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
-		_obelisk_data.pos
 	}
 
 	public fun get_score(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
@@ -115,7 +96,7 @@ module happyfarm::plant_schema {
 		_obelisk_data.owner
 	}
 
-	public fun get_plant_type(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
+	public fun get_plant_type(_obelisk_world: &World, _obelisk_entity_key: address): address {
 		let _obelisk_schema = world::get_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);

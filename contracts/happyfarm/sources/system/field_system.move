@@ -22,7 +22,7 @@ module happyfarm::field_system {
         player_info_schema::set_field(world,addr,field_number);
         
         let field_key = entity_key::from_u256((field_number as u256));
-        field_info_schema::set(world,field_key,addr,field_number);
+        field_info_schema::set(world,field_key,addr,field_number,1000);
 
         global_schema::set_last_field_no(world,field_number+1);
     }

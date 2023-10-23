@@ -32,19 +32,21 @@ export const obeliskConfig = {
       valueType: {
         owner: 'address',
         filed_no: 'u64',
+        last_plant_no: 'u64',
       },
     },
     plant: {
       valueType: {
-        pos: 'vector<u8>',
         score: 'u64',
         owner: 'address',
-        plant_type: 'u64',
+        plant_type: 'address',
       },
     },
     plant_attrs: {
       valueType: {
+        url: 'string',
         init_score: 'u64',
+        harvest_socre: 'u64',
         sun_effect: 'u64',
         wind_effct: 'u64',
         rain_effct: 'u64',
