@@ -20,7 +20,7 @@ export const obeliskConfig = {
       defaultValue: {
         counter: 0,
         admin: '0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697',
-        field_price: 10,
+        field_price: 50,
         last_field_no: 1000,
         init_user_socre: 800,
         sun_score_need: 15,

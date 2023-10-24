@@ -47,7 +47,7 @@ module happyfarm::global_schema {
 	}
 
 	public fun register(_obelisk_world: &mut World, _ctx: &mut TxContext) {
-		let _obelisk_schema = new(0,@0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697,10,1000,800,15,10,25,16);
+		let _obelisk_schema = new(0,@0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697,50,1000,800,15,10,25,16);
 		world::add_schema<GlobalData>(_obelisk_world, SCHEMA_ID, _obelisk_schema);
 		events::emit_set(SCHEMA_ID, none(), _obelisk_schema);
 	}
