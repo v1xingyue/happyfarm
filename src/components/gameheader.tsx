@@ -42,11 +42,9 @@ const GameHeader = () => {
       const obelisk = await LoadObelisk();
       const result = await obelisk.getEntity(WORLD_ID, 'player_info', address);
       if (result) {
-        const [score, field, register] = result;
-        console.log(field, field == 0);
+        const [score, register] = result;
         setPlayerInfo({
           score,
-          field,
           register,
           refresh: 0,
         });
@@ -57,29 +55,26 @@ const GameHeader = () => {
 
   return (
     <div className="mt-2">
-      World Links:{' '}
-      <a className="link link-hover link-info" target="_blank" href={packageLink(PACKAGE_ID)}>
-        {PACKAGE_ID}
-      </a>
-      {playerInfo.register ? (
-        <p className="mt-2">
-          <span className="ml-3">Score: {playerInfo.score}</span>
-
-          {playerInfo.field != 0 ? (
-            <span className="ml-3">field: {playerInfo.field}</span>
-          ) : (
+      <div>
+        World Links:{' '}
+        <a className="link link-hover link-info" target="_blank" href={packageLink(PACKAGE_ID)}>
+          {PACKAGE_ID}
+        </a>
+      </div>
+      <div className="mt-3">
+        {playerInfo.register ? (
+          <p>
+            <span className="ml-3">Score: {playerInfo.score}</span>
             <button onClick={buyAField} className="btn btn-primary ml-5">
               Buy a field
             </button>
-          )}
-        </p>
-      ) : (
-        <p>
-          <span className="ml-3" onClick={registerGame}>
-            <button className="btn btn-info">Register Game</button>
-          </span>
-        </p>
-      )}
+          </p>
+        ) : (
+          <button className="btn btn-info" onClick={registerGame}>
+            Register Game
+          </button>
+        )}
+      </div>
     </div>
   );
 };

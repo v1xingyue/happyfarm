@@ -3,7 +3,7 @@ import { LoadObelisk } from '../tool';
 import { WORLD_ID } from '../chain/config';
 import { TransactionBlock } from '@mysten/sui.js';
 import PlantDisplay from './plant_display';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { PlantUpdate, PlayerInfoVersion } from '../jotai';
 
 type ChildProps = {
@@ -12,7 +12,6 @@ type ChildProps = {
 
 const Field: React.FC<ChildProps> = ({ entity }) => {
   console.log('props : ', entity);
-
   const [playerInfoVersion, setPlayerInfoVersion] = useAtom(PlayerInfoVersion);
   const [owner, setOwner] = useState('');
   const [fieldNumber, setFieldNumber] = useState(0);
@@ -30,15 +29,14 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
       setFieldNumber(content[1]);
       setLatPlantNo(content[2]);
       const plantKeys = [];
-      for (let i = 1000; i < lastPlantNo; i++) {
+      for (let i = fieldNumber * 100; i < lastPlantNo; i++) {
         plantKeys.push(await obelisk.entity_key_from_u256(i));
       }
       console.log(plantKeys);
       setPlantKeys(plantKeys);
-      setPlayerInfoVersion(playerInfoVersion + 1);
     };
     fetchData();
-  }, [entity, displayVersion, lastPlantNo]);
+  }, [entity, fieldNumber, lastPlantNo, displayVersion]);
 
   const applySkill = async () => {
     console.log('apply skill...');
@@ -53,12 +51,15 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
     if (response.effects.status.status == 'success') {
       setDisplayVersion(displayVersion + 1);
       setPlantUpdate(plantUpdate + 1);
+      setPlayerInfoVersion(playerInfoVersion + 1);
     }
   };
 
   const growPlant = async () => {
+    let plant_type_id = Math.floor(Math.random() * 5) + 15;
+    console.log('grow plant : ', plant_type_id);
     const obelisk = await LoadObelisk();
-    const plant_type = await obelisk.entity_key_from_u256(18);
+    const plant_type = await obelisk.entity_key_from_u256(plant_type_id);
     const tx = new TransactionBlock();
     const params = [tx.pure(WORLD_ID), tx.pure(entity), tx.pure(plant_type)];
     console.log(params);
@@ -66,11 +67,12 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
     const response = await obelisk.signAndSendTxn(new_tx as TransactionBlock);
     if (response.effects.status.status == 'success') {
       setDisplayVersion(displayVersion + 1);
+      setPlayerInfoVersion(playerInfoVersion + 1);
     }
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl image-full m-2 float-left">
+    <div className="card bg-base-100 shadow-xl image-full m-1 float-left">
       <div className="card-body">
         <h2 className="card-title">Field : {fieldNumber}</h2>
         <p>
@@ -91,7 +93,7 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
             })}
           </ul>
           <div className="card-actions justify-end">
-            {plantKeys.length <= 3 && (
+            {plantKeys.length <= 10 && (
               <button onClick={growPlant} className="btn btn-primary">
                 Grow
               </button>

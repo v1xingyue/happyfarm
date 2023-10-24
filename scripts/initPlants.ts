@@ -14,12 +14,12 @@ async function main() {
       tx.pure(WORLD_ID),
       tx.pure(plant_id),
       tx.pure('https://img0.baidu.com/it/u=1991033559,2195249320&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500'),
-      tx.pure(30),
+      tx.pure(50),
       tx.pure(100),
     ];
 
     for (let m = 0; m < 4; m++) {
-      let value = Math.floor(Math.random() * 5);
+      let value = Math.floor(Math.random() * 5 + 5);
       params.push(tx.pure(value));
     }
 

@@ -5,7 +5,6 @@ const UserAddress = atom('');
 const UserBalance = atom('');
 const PlayerInfo = atom({
   score: 0,
-  field: 0,
   register: false,
   refresh: 0,
 });

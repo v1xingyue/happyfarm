@@ -17,14 +17,13 @@ module happyfarm::field_system {
         let field_price = global_schema::get_field_price(world);
         let field_number = global_schema::get_last_field_no(world);
         let addr = tx_context::sender(ctx);
-        let (score,_,register) = player_info_schema::get(world,addr);
+        let (score,register) = player_info_schema::get(world,addr);
         assert!(register && score >= field_price,E_Score_Not_Enough);
         let new_score = score - field_price;
         player_info_schema::set_score(world,addr,new_score);
-        player_info_schema::set_field(world,addr,field_number);
         
         let field_key = entity_key::from_u256((field_number as u256));
-        field_info_schema::set(world,field_key,addr,field_number,1000);
+        field_info_schema::set(world,field_key,addr,field_number,field_number * 100);
 
         global_schema::set_last_field_no(world,field_number+1);
     }
@@ -57,20 +56,28 @@ module happyfarm::field_system {
     public entry fun apply_skill(world: &mut World,filed_addr:address,skill_type:u8,ctx: &mut TxContext){
         let addr = tx_context::sender(ctx);
         let skill_need_score = get_skill_need_score(world,skill_type);
-        let (score,_,register) = player_info_schema::get(world,addr);
+        let (score,register) = player_info_schema::get(world,addr);
         assert!(register && score >= skill_need_score,E_Score_Not_Enough);
         let new_score = score - skill_need_score;
         player_info_schema::set_score(world,addr,new_score);
 
+        let field_number = field_info_schema::get_filed_no(world,filed_addr);
         let last_plant_number = field_info_schema::get_last_plant_no(world,filed_addr);
-        let loop_key = 1000;
+        let loop_key = 100 * field_number;
         while( loop_key < last_plant_number ) {
             let plant_key = entity_key::from_u256((loop_key as u256));
-            let plant_type_addr = plant_schema::get_plant_type(world,plant_key);
-            let affect = get_affect_score(world,skill_type,plant_type_addr);
-            let plant_score = plant_schema::get_score(world,plant_key);
-            plant_schema::set_score(world,plant_key,plant_score+affect);
-            loop_key = loop_key + 1;
+            if(!plant_schema::get_harvested(world,plant_key)){
+                let plant_type_addr = plant_schema::get_plant_type(world,plant_key);
+                let affect = get_affect_score(world,skill_type,plant_type_addr);
+                let plant_score = plant_schema::get_score(world,plant_key);
+                let new_score = plant_score + affect;
+                let max_score = plant_attrs_schema::get_harvest_socre(world,plant_type_addr);
+                if(new_score > max_score){
+                    new_score = max_score;
+                };
+                plant_schema::set_score(world,plant_key,new_score);
+            };
+            loop_key = loop_key + 1;    
         }
     }
 
