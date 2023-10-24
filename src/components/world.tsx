@@ -1,11 +1,12 @@
-import { useAtom } from 'jotai';
-import { FieldAddrs } from '../jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { FieldAddrs, WorldVersion } from '../jotai';
 import { useEffect } from 'react';
 import { LoadObelisk } from '../tool';
 import { WORLD_ID } from '../chain/config';
 import Field from './field';
 
 const World = () => {
+  const worldVersion = useAtomValue(WorldVersion);
   const [fieldAddrs, setFieldAddrs] = useAtom(FieldAddrs);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const World = () => {
       }
     };
     fetchFields();
-  }, [setFieldAddrs]);
+  }, [setFieldAddrs, worldVersion]);
 
   return (
     <div className="mt-3">

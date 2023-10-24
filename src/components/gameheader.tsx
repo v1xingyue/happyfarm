@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { PlayerInfo, PlayerInfoVersion, UserAddress } from '../jotai';
+import { PlayerInfo, PlayerInfoVersion, UserAddress, WorldVersion } from '../jotai';
 import { TransactionBlock } from '@mysten/sui.js';
 import { LoadObelisk, packageLink } from '../tool';
 import { PACKAGE_ID, WORLD_ID } from '../chain/config';
@@ -9,6 +9,7 @@ const GameHeader = () => {
   const [playerInfo, setPlayerInfo] = useAtom(PlayerInfo);
   const [playerInfoVersion, setPlayerInfoVersion] = useAtom(PlayerInfoVersion);
   const [address] = useAtom(UserAddress);
+  const [worldVersion, setWorldVersion] = useAtom(WorldVersion);
 
   const registerGame = async () => {
     const obelisk = await LoadObelisk();
@@ -31,6 +32,7 @@ const GameHeader = () => {
     const response = await obelisk.signAndSendTxn(new_tx as TransactionBlock);
     if (response.effects.status.status == 'success') {
       setPlayerInfoVersion(playerInfoVersion + 1);
+      setWorldVersion(worldVersion + 1);
     }
   };
 

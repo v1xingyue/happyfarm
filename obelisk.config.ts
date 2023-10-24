@@ -20,7 +20,7 @@ export const obeliskConfig = {
         field_price: 10,
         last_field_no: 1000,
         last_plant_no: 2000,
-        init_user_socre: 200,
+        init_user_socre: 300,
       },
     },
     player_info: {

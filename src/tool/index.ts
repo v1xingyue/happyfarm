@@ -26,19 +26,24 @@ const LoadObelisk = async () => {
   }
 };
 
+const linkName = () => {
+  if (NETWORK === 'localnet') {
+    return 'local';
+  } else {
+    return NETWORK;
+  }
+};
+
 const addressLink = (addr: string) => {
-  const linkName = NETWORK.substring(0, NETWORK.length - 3);
-  return `https://suiexplorer.com/address/${addr}?network=${linkName}`;
+  return `https://suiexplorer.com/address/${addr}?network=${linkName()}`;
 };
 
 const objectLink = (addr: string) => {
-  const linkName = NETWORK.substring(0, NETWORK.length - 3);
-  return `https://suiexplorer.com/object/${addr}?network=${linkName}`;
+  return `https://suiexplorer.com/object/${addr}?network=${linkName()}`;
 };
 
 const packageLink = (addr: string) => {
-  const linkName = NETWORK.substring(0, NETWORK.length - 3);
-  return `https://suiexplorer.com/object/${addr}?network=${linkName}`;
+  return `https://suiexplorer.com/object/${addr}?network=${linkName()}`;
 };
 
 export { LoadObelisk, addressLink, objectLink, packageLink };
