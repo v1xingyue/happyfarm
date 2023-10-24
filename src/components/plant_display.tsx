@@ -49,11 +49,11 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
       <div className="badge badge-secondary ml-3">{score}</div>
       {harvested ? (
         <> - </>
-      ) : (
+      ) : score == 100 ? (
         <button onClick={HarvsetPlant} className="btn btn-info m-2">
           Harvest
         </button>
-      )}
+      ) : null}
     </div>
   );
 };
