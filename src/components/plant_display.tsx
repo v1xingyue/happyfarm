@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { LoadObelisk } from '../tool';
 import { WORLD_ID } from '../chain/config';
 import { TransactionBlock } from '@mysten/sui.js';
-import { useAtom } from 'jotai';
-import { PlayerInfoVersion } from '../jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { PlantUpdate, PlayerInfoVersion } from '../jotai';
 
 type ChildProps = {
   entity: string;
@@ -14,6 +14,7 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
   const [harvested, setHarvested] = useState(false);
   const [score, setScore] = useState(0);
   const [displayVersion, setDisplayVersion] = useState(0);
+  const plantUpdate = useAtomValue(PlantUpdate);
 
   useEffect(() => {
     const LoadPlant = async () => {
@@ -24,7 +25,7 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
       setHarvested(content[3]);
     };
     LoadPlant();
-  }, [entity, displayVersion]);
+  }, [entity, displayVersion, plantUpdate]);
 
   const HarvsetPlant = async () => {
     const obelisk = await LoadObelisk();

@@ -16,6 +16,7 @@ const SecretKey = atom('');
 
 const FieldAddrs = atom([]);
 const WorldVersion = atom(0);
+const PlantUpdate = atom(0);
 
 export {
   Value,
@@ -27,4 +28,5 @@ export {
   BalanceVersion,
   FieldAddrs,
   WorldVersion,
+  PlantUpdate,
 };

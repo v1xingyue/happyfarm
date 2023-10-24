@@ -17,33 +17,45 @@ module happyfarm::global_schema {
 	// last_field_no
 	// last_plant_no
 	// init_user_socre
+	// sun_score_need
+	// rain_score_need
+	// wind_score_need
+	// snow_score_need
 	struct GlobalData has copy, drop , store {
 		counter: u64,
 		admin: address,
 		field_price: u64,
 		last_field_no: u64,
 		last_plant_no: u64,
-		init_user_socre: u64
+		init_user_socre: u64,
+		sun_score_need: u64,
+		rain_score_need: u64,
+		wind_score_need: u64,
+		snow_score_need: u64
 	}
 
-	public fun new(counter: u64, admin: address, field_price: u64, last_field_no: u64, last_plant_no: u64, init_user_socre: u64): GlobalData {
+	public fun new(counter: u64, admin: address, field_price: u64, last_field_no: u64, last_plant_no: u64, init_user_socre: u64, sun_score_need: u64, rain_score_need: u64, wind_score_need: u64, snow_score_need: u64): GlobalData {
 		GlobalData {
 			counter, 
 			admin, 
 			field_price, 
 			last_field_no, 
 			last_plant_no, 
-			init_user_socre
+			init_user_socre, 
+			sun_score_need, 
+			rain_score_need, 
+			wind_score_need, 
+			snow_score_need
 		}
 	}
 
 	public fun register(_obelisk_world: &mut World, _ctx: &mut TxContext) {
-		let _obelisk_schema = new(0,@0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697,10,1000,2000,300);
+		let _obelisk_schema = new(0,@0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697,10,1000,2000,300,15,15,15,15);
 		world::add_schema<GlobalData>(_obelisk_world, SCHEMA_ID, _obelisk_schema);
 		events::emit_set(SCHEMA_ID, none(), _obelisk_schema);
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World,  counter: u64, admin: address, field_price: u64, last_field_no: u64, last_plant_no: u64, init_user_socre: u64) {
+	public(friend) fun set(_obelisk_world: &mut World,  counter: u64, admin: address, field_price: u64, last_field_no: u64, last_plant_no: u64, init_user_socre: u64, sun_score_need: u64, rain_score_need: u64, wind_score_need: u64, snow_score_need: u64) {
 		let _obelisk_schema = world::get_mut_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
 		_obelisk_schema.counter = counter;
 		_obelisk_schema.admin = admin;
@@ -51,6 +63,10 @@ module happyfarm::global_schema {
 		_obelisk_schema.last_field_no = last_field_no;
 		_obelisk_schema.last_plant_no = last_plant_no;
 		_obelisk_schema.init_user_socre = init_user_socre;
+		_obelisk_schema.sun_score_need = sun_score_need;
+		_obelisk_schema.rain_score_need = rain_score_need;
+		_obelisk_schema.wind_score_need = wind_score_need;
+		_obelisk_schema.snow_score_need = snow_score_need;
 	}
 
 	public(friend) fun set_counter(_obelisk_world: &mut World, counter: u64) {
@@ -89,7 +105,31 @@ module happyfarm::global_schema {
 		events::emit_set(SCHEMA_ID, none(), *_obelisk_schema)
 	}
 
-	public fun get(_obelisk_world: &World): (u64,address,u64,u64,u64,u64) {
+	public(friend) fun set_sun_score_need(_obelisk_world: &mut World, sun_score_need: u64) {
+		let _obelisk_schema = world::get_mut_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.sun_score_need = sun_score_need;
+		events::emit_set(SCHEMA_ID, none(), *_obelisk_schema)
+	}
+
+	public(friend) fun set_rain_score_need(_obelisk_world: &mut World, rain_score_need: u64) {
+		let _obelisk_schema = world::get_mut_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.rain_score_need = rain_score_need;
+		events::emit_set(SCHEMA_ID, none(), *_obelisk_schema)
+	}
+
+	public(friend) fun set_wind_score_need(_obelisk_world: &mut World, wind_score_need: u64) {
+		let _obelisk_schema = world::get_mut_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.wind_score_need = wind_score_need;
+		events::emit_set(SCHEMA_ID, none(), *_obelisk_schema)
+	}
+
+	public(friend) fun set_snow_score_need(_obelisk_world: &mut World, snow_score_need: u64) {
+		let _obelisk_schema = world::get_mut_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.snow_score_need = snow_score_need;
+		events::emit_set(SCHEMA_ID, none(), *_obelisk_schema)
+	}
+
+	public fun get(_obelisk_world: &World): (u64,address,u64,u64,u64,u64,u64,u64,u64,u64) {
 		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
 		(
 			_obelisk_schema.counter,
@@ -98,6 +138,10 @@ module happyfarm::global_schema {
 			_obelisk_schema.last_field_no,
 			_obelisk_schema.last_plant_no,
 			_obelisk_schema.init_user_socre,
+			_obelisk_schema.sun_score_need,
+			_obelisk_schema.rain_score_need,
+			_obelisk_schema.wind_score_need,
+			_obelisk_schema.snow_score_need,
 		)
 	}
 
@@ -129,5 +173,25 @@ module happyfarm::global_schema {
 	public fun get_init_user_socre(_obelisk_world: &World): u64 {
 		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
 		_obelisk_schema.init_user_socre
+	}
+
+	public fun get_sun_score_need(_obelisk_world: &World): u64 {
+		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.sun_score_need
+	}
+
+	public fun get_rain_score_need(_obelisk_world: &World): u64 {
+		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.rain_score_need
+	}
+
+	public fun get_wind_score_need(_obelisk_world: &World): u64 {
+		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.wind_score_need
+	}
+
+	public fun get_snow_score_need(_obelisk_world: &World): u64 {
+		let _obelisk_schema = world::get_schema<GlobalData>(_obelisk_world, SCHEMA_ID);
+		_obelisk_schema.snow_score_need
 	}
 }

@@ -13,6 +13,10 @@ export const obeliskConfig = {
         last_field_no: 'u64',
         last_plant_no: 'u64',
         init_user_socre: 'u64',
+        sun_score_need: 'u64',
+        rain_score_need: 'u64',
+        wind_score_need: 'u64',
+        snow_score_need: 'u64',
       },
       defaultValue: {
         counter: 0,
@@ -21,6 +25,10 @@ export const obeliskConfig = {
         last_field_no: 1000,
         last_plant_no: 2000,
         init_user_socre: 300,
+        sun_score_need: 15,
+        rain_score_need: 15,
+        wind_score_need: 15,
+        snow_score_need: 15,
       },
     },
     player_info: {

@@ -37,7 +37,6 @@ module happyfarm::plant_system {
         let field_owner = field_info_schema::get_owner(world,field_addr);
         let field_owner_score = player_info_schema::get_score(world,field_owner);
         player_info_schema::set_score(world,field_owner,field_owner_score+5);
-        
         plant_schema::set(world,plant_addr,0,owner,plant_type,true);
     }
 
