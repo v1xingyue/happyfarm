@@ -21,7 +21,8 @@ module happyfarm::plant_system {
         plant_attrs_schema::set(world,key,url,init_score,harvest_socre,sun_effect,wind_effct,rain_effct,snow_effct);
     }
 
-    public entry fun grow_plant(world:&mut World,field_addr:address,plant_type:address,ctx: &mut TxContext){
+    public entry fun grow_plant(world:&mut World,field_addr:address,plant_type_no:u64,ctx: &mut TxContext){
+        let plant_type = entity_key::from_u256((plant_type_no as u256));
         let range_from = field_info_schema::get_filed_no(world,field_addr) * 100;
         let plant_no = field_info_schema::get_last_plant_no(world,field_addr);
         assert!(plant_no < range_from+FIELD_MAX_SIZE,E_Field_Full);
@@ -31,12 +32,12 @@ module happyfarm::plant_system {
         let player_score = player_info_schema::get_score(world,addr);
         assert!(player_score >= init_score,E_Score_Not_Enough);
         player_info_schema::set_score(world,addr,player_score-init_score);
-        plant_schema::set(world,plant_key,init_score,addr,plant_type,false);
+        plant_schema::set(world,plant_key,init_score,addr,plant_type,false,plant_type_no);
         field_info_schema::set_last_plant_no(world,field_addr,plant_no+1);
     }
 
     public entry fun harvest_plant(world:&mut World,field_addr:address,plant_addr:address){
-        let (score,owner,plant_type,_) = plant_schema::get(world,plant_addr);
+        let (score,owner,plant_type,_,plant_type_no) = plant_schema::get(world,plant_addr);
         let harvest_socre = plant_attrs_schema::get_harvest_socre(world,plant_type);
         assert!(score == harvest_socre,E_Plant_Not_Mature);
         let player_score = player_info_schema::get_score(world,owner);
@@ -44,7 +45,7 @@ module happyfarm::plant_system {
         let field_owner = field_info_schema::get_owner(world,field_addr);
         let field_owner_score = player_info_schema::get_score(world,field_owner);
         player_info_schema::set_score(world,field_owner,field_owner_score+5);
-        plant_schema::set(world,plant_addr,0,owner,plant_type,true);
+        plant_schema::set(world,plant_addr,0,owner,plant_type,true,plant_type_no);
     }
 
 }

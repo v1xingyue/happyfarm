@@ -15,6 +15,7 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
   const [score, setScore] = useState(0);
   const [displayVersion, setDisplayVersion] = useState(0);
   const plantUpdate = useAtomValue(PlantUpdate);
+  const [plantTypeNo, setPlantTypeNo] = useState(0);
 
   useEffect(() => {
     const LoadPlant = async () => {
@@ -23,9 +24,10 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
       console.log(content);
       setScore(content[0]);
       setHarvested(content[3]);
+      setPlantTypeNo(content[4]);
     };
     LoadPlant();
-  }, [entity, displayVersion, plantUpdate]);
+  }, [entity, displayVersion, plantUpdate, plantTypeNo]);
 
   const HarvsetPlant = async () => {
     const obelisk = await LoadObelisk();
@@ -42,7 +44,9 @@ const PlantDisplay: React.FC<ChildProps> = ({ entity, field }) => {
 
   return (
     <div className="m-2">
-      Plant: {entity} {score}{' '}
+      <div className="badge badge-info gap-2">{entity}</div>
+      <div className="badge badge-success gap-2 ml-3">{plantTypeNo}</div>
+      <div className="badge badge-secondary ml-3">{score}</div>
       {harvested ? (
         <> - </>
       ) : (

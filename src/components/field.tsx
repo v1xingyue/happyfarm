@@ -59,9 +59,8 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
     let plant_type_id = Math.floor(Math.random() * 5) + 15;
     console.log('grow plant : ', plant_type_id);
     const obelisk = await LoadObelisk();
-    const plant_type = await obelisk.entity_key_from_u256(plant_type_id);
     const tx = new TransactionBlock();
-    const params = [tx.pure(WORLD_ID), tx.pure(entity), tx.pure(plant_type)];
+    const params = [tx.pure(WORLD_ID), tx.pure(entity), tx.pure(plant_type_id)];
     console.log(params);
     const new_tx = await obelisk.tx.plant_system.grow_plant(tx, params, true);
     const response = await obelisk.signAndSendTxn(new_tx as TransactionBlock);

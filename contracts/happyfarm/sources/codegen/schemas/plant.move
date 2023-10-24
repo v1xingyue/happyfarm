@@ -20,19 +20,22 @@ module happyfarm::plant_schema {
 	// owner
 	// plant_type
 	// harvested
+	// plant_type_no
 	struct PlantData has copy, drop , store {
 		score: u64,
 		owner: address,
 		plant_type: address,
-		harvested: bool
+		harvested: bool,
+		plant_type_no: u64
 	}
 
-	public fun new(score: u64, owner: address, plant_type: address, harvested: bool): PlantData {
+	public fun new(score: u64, owner: address, plant_type: address, harvested: bool, plant_type_no: u64): PlantData {
 		PlantData {
 			score, 
 			owner, 
 			plant_type, 
-			harvested
+			harvested, 
+			plant_type_no
 		}
 	}
 
@@ -40,9 +43,9 @@ module happyfarm::plant_schema {
 		world::add_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID, table::new<address, PlantData>(ctx));
 	}
 
-	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  score: u64, owner: address, plant_type: address, harvested: bool) {
+	public(friend) fun set(_obelisk_world: &mut World, _obelisk_entity_key: address,  score: u64, owner: address, plant_type: address, harvested: bool, plant_type_no: u64) {
 		let _obelisk_schema = world::get_mut_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
-		let _obelisk_data = new( score, owner, plant_type, harvested);
+		let _obelisk_data = new( score, owner, plant_type, harvested, plant_type_no);
 		if(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key)) {
 			*table::borrow_mut<address, PlantData>(_obelisk_schema, _obelisk_entity_key) = _obelisk_data;
 		} else {
@@ -83,7 +86,15 @@ module happyfarm::plant_schema {
 		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
 	}
 
-	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,address,address,bool) {
+	public(friend) fun set_plant_type_no(_obelisk_world: &mut World, _obelisk_entity_key: address, plant_type_no: u64) {
+		let _obelisk_schema = world::get_mut_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow_mut<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.plant_type_no = plant_type_no;
+		events::emit_set(SCHEMA_ID, some(_obelisk_entity_key), *_obelisk_data)
+	}
+
+	public fun get(_obelisk_world: &World, _obelisk_entity_key: address): (u64,address,address,bool,u64) {
 		let _obelisk_schema = world::get_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
 		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
@@ -91,7 +102,8 @@ module happyfarm::plant_schema {
 			_obelisk_data.score,
 			_obelisk_data.owner,
 			_obelisk_data.plant_type,
-			_obelisk_data.harvested
+			_obelisk_data.harvested,
+			_obelisk_data.plant_type_no
 		)
 	}
 
@@ -121,6 +133,13 @@ module happyfarm::plant_schema {
 		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
 		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
 		_obelisk_data.harvested
+	}
+
+	public fun get_plant_type_no(_obelisk_world: &World, _obelisk_entity_key: address): u64 {
+		let _obelisk_schema = world::get_schema<Table<address,PlantData>>(_obelisk_world, SCHEMA_ID);
+		assert!(table::contains<address, PlantData>(_obelisk_schema, _obelisk_entity_key), EEntityDoesNotExist);
+		let _obelisk_data = table::borrow<address, PlantData>(_obelisk_schema, _obelisk_entity_key);
+		_obelisk_data.plant_type_no
 	}
 
 	public(friend) fun remove(_obelisk_world: &mut World, _obelisk_entity_key: address) {

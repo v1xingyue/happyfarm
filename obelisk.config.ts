@@ -48,6 +48,7 @@ export const obeliskConfig = {
         owner: 'address',
         plant_type: 'address',
         harvested: 'bool',
+        plant_type_no: 'u64',
       },
     },
     plant_attrs: {
