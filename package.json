@@ -28,7 +28,8 @@
     "localnode": "nohup obelisk localnode > localnode.nohup.out &",
     "worldgen": "obelisk schemagen obelisk.config.ts",
     "storeConfig": "ts-node scripts/storeConfig.ts",
-    "generateAccount": "ts-node scripts/generateAccount.ts"
+    "generateAccount": "ts-node scripts/generateAccount.ts",
+    "initPlants": "ts-node scripts/initPlants.ts"
   },
   "dependencies": {
     "@0xobelisk/cli": "^0.4.5",

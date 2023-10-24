@@ -3,7 +3,7 @@ import { ObeliskConfig } from '@0xobelisk/common';
 export const obeliskConfig = {
   name: 'happyfarm',
   description: 'happyfarm',
-  systems: ['counter_system', 'player_system', 'field_system'],
+  systems: ['counter_system', 'player_system', 'field_system', 'plant_system'],
   schemas: {
     global: {
       valueType: {
@@ -11,13 +11,15 @@ export const obeliskConfig = {
         admin: 'address',
         field_price: 'u64',
         last_field_no: 'u64',
+        last_plant_no: 'u64',
         init_user_socre: 'u64',
       },
       defaultValue: {
         counter: 0,
-        admin: '0x0000000',
+        admin: '0xbd2ff4ec18e5263cedda158985da65fc5324f4df81632db8f0146a1f1e41b697',
         field_price: 10,
         last_field_no: 1000,
+        last_plant_no: 2000,
         init_user_socre: 200,
       },
     },
@@ -40,11 +42,12 @@ export const obeliskConfig = {
         score: 'u64',
         owner: 'address',
         plant_type: 'address',
+        harvested: 'bool',
       },
     },
     plant_attrs: {
       valueType: {
-        url: 'string',
+        url: 'vector<u8>',
         init_score: 'u64',
         harvest_socre: 'u64',
         sun_effect: 'u64',

@@ -1,17 +1,14 @@
 import { useAtom } from 'jotai';
-import { BalanceVersion, PlayerInfo, PlayerInfoVersion, UserAddress, UserBalance } from '../jotai';
-import { SuiAddress, TransactionBlock } from '@mysten/sui.js';
-import { LoadObelisk } from '../tool';
-import { NETWORK, WORLD_ID } from '../chain/config';
+import { PlayerInfo, PlayerInfoVersion, UserAddress } from '../jotai';
+import { TransactionBlock } from '@mysten/sui.js';
+import { LoadObelisk, packageLink } from '../tool';
+import { PACKAGE_ID, WORLD_ID } from '../chain/config';
 import { useEffect } from 'react';
-import { FaucetNetworkType } from '@0xobelisk/client';
 
 const GameHeader = () => {
   const [playerInfo, setPlayerInfo] = useAtom(PlayerInfo);
-  const [balanceVersion, setBalanceVersion] = useAtom(BalanceVersion);
   const [playerInfoVersion, setPlayerInfoVersion] = useAtom(PlayerInfoVersion);
   const [address] = useAtom(UserAddress);
-  const [blance] = useAtom(UserBalance);
 
   const registerGame = async () => {
     const obelisk = await LoadObelisk();
@@ -57,9 +54,13 @@ const GameHeader = () => {
   }, [address, setPlayerInfo, playerInfoVersion]);
 
   return (
-    <p className="mt-2">
+    <div className="mt-2">
+      World Links:{' '}
+      <a className="link link-hover link-info" target="_blank" href={packageLink(PACKAGE_ID)}>
+        {PACKAGE_ID}
+      </a>
       {playerInfo.register ? (
-        <>
+        <p className="mt-2">
           <span className="ml-3">Score: {playerInfo.score}</span>
 
           {playerInfo.field != 0 ? (
@@ -69,13 +70,15 @@ const GameHeader = () => {
               Buy a field
             </button>
           )}
-        </>
+        </p>
       ) : (
-        <span className="ml-3" onClick={registerGame}>
-          <button className="btn btn-info">Register Game</button>
-        </span>
+        <p>
+          <span className="ml-3" onClick={registerGame}>
+            <button className="btn btn-info">Register Game</button>
+          </span>
+        </p>
       )}
-    </p>
+    </div>
   );
 };
 
