@@ -41,7 +41,22 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
   const applySkill = async () => {
     console.log('apply skill...');
     let skillType = Math.floor(Math.random() * 4);
-    alert(skillType);
+    let msg = '阳光普照';
+    switch (skillType) {
+      case 0:
+        msg = '下一场大雨吧';
+        break;
+      case 1:
+        msg = '下一场大雪吧';
+        break;
+      case 2:
+        msg = '刮一场大风吧';
+        break;
+      case 3:
+        msg = '阳光普照';
+        break;
+    }
+    alert(msg);
     let obelisk = await LoadObelisk();
     const tx = new TransactionBlock();
     const params = [tx.pure(WORLD_ID), tx.pure(entity), tx.pure(skillType)];
