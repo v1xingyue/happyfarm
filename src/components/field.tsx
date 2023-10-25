@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LoadObelisk } from '../tool';
+import { LoadObelisk, addressLink } from '../tool';
 import { WORLD_ID } from '../chain/config';
 import { TransactionBlock } from '@mysten/sui.js';
 import PlantDisplay from './plant_display';
@@ -57,6 +57,7 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
         break;
     }
     alert(msg);
+    console.log(msg);
     let obelisk = await LoadObelisk();
     const tx = new TransactionBlock();
     const params = [tx.pure(WORLD_ID), tx.pure(entity), tx.pure(skillType)];
@@ -90,7 +91,11 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
       <div className="card-body">
         <h2 className="card-title">Field : {fieldNumber}</h2>
         <p>
-          Owner : {owner}{' '}
+          Owner :{' '}
+          <a href={addressLink(owner)} className="link link-hover link-info" target="_blank">
+            {' '}
+            {owner}
+          </a>{' '}
           <button onClick={applySkill} className="btn btn-secondary ml-3">
             Hit Plant!!
           </button>{' '}
