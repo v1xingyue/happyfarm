@@ -13,7 +13,7 @@ async function main() {
     let params = [
       tx.pure(WORLD_ID),
       tx.pure(plant_id),
-      tx.pure('https://img0.baidu.com/it/u=1991033559,2195249320&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500'),
+      tx.pure('https://happyfarm.vercel.app/assets/tree1.png'),
       tx.pure(50),
       tx.pure(100),
     ];

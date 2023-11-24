@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
 import { PlayerInfo, PlayerInfoVersion, UserAddress, WorldVersion } from '../jotai';
 import { TransactionBlock } from '@mysten/sui.js';
-import { LoadObelisk, packageLink } from '../tool';
+import { packageLink } from '../tool';
 import { PACKAGE_ID, WORLD_ID } from '../chain/config';
 import { useEffect } from 'react';
+import useObelisk from '../hooks/useObelisk';
 
 const GameHeader = () => {
   const [playerInfo, setPlayerInfo] = useAtom(PlayerInfo);
@@ -11,8 +12,10 @@ const GameHeader = () => {
   const [address] = useAtom(UserAddress);
   const [worldVersion, setWorldVersion] = useAtom(WorldVersion);
 
+  const obelisk = useObelisk(localStorage.getItem(''));
+
   const registerGame = async () => {
-    const obelisk = await LoadObelisk();
+    if (obelisk == null) return;
     const tx = new TransactionBlock();
     const world = tx.pure(WORLD_ID);
     const params = [world];
@@ -24,7 +27,7 @@ const GameHeader = () => {
   };
 
   const buyAField = async () => {
-    const obelisk = await LoadObelisk();
+    if (obelisk == null) return;
     const tx = new TransactionBlock();
     const world = tx.pure(WORLD_ID);
     const params = [world];
@@ -38,8 +41,7 @@ const GameHeader = () => {
 
   useEffect(() => {
     const fetchPlayerInfo = async () => {
-      if (address == '') return;
-      const obelisk = await LoadObelisk();
+      if (address == '' || obelisk == null) return;
       const result = await obelisk.getEntity(WORLD_ID, 'player_info', address);
       if (result) {
         const [score, register] = result;

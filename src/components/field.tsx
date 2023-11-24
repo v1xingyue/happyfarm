@@ -87,7 +87,7 @@ const Field: React.FC<ChildProps> = ({ entity }) => {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl image-full m-1 float-left">
+    <div className="card bg-base-100 shadow-xl image-full mt-2 float-left">
       <div className="card-body">
         <h2 className="card-title">Field : {fieldNumber}</h2>
         <p>

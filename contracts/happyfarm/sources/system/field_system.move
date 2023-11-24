@@ -9,8 +9,6 @@ module happyfarm::field_system {
     use happyfarm::plant_schema;
     use happyfarm::plant_attrs_schema;
     
-    
-
     const E_Score_Not_Enough:u64 = 1001;
     
     public entry fun buy_a_field(world: &mut World,ctx: &mut TxContext){
