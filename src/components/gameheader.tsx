@@ -12,7 +12,7 @@ const GameHeader = () => {
   const [address] = useAtom(UserAddress);
   const [worldVersion, setWorldVersion] = useAtom(WorldVersion);
 
-  const obelisk = useObelisk(localStorage.getItem(''));
+  const obelisk = useObelisk();
 
   const registerGame = async () => {
     if (obelisk == null) return;
